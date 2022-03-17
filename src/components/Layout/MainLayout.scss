@@ -1,0 +1,13 @@
+
+.banner {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  & .img {
+    height: 300px;
+    background: beige;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
