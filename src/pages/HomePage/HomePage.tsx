@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
@@ -16,17 +16,28 @@ import {
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
+import { useSearchSong } from "../../hooks/Song";
 
 export function HomePage() {
   const [selectedIndex, setSelectedIndex] = useState("A");
+  const [songs, setSongs] = useState<any[]>([]);
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     key: string
   ) => {
     setSelectedIndex(key);
-    console.log(key);
   };
 
+  const { submitSearchSong, isLoading } = useSearchSong();
+  useEffect(() => {
+    const fetchSong = async () => {
+      const data = await submitSearchSong("asdf");
+      setSongs(data.items);
+    };
+    fetchSong();
+  }, []);
+
+  if (isLoading) return <Fragment>Loading...</Fragment>;
   return (
     <Fragment>
       <Grid className="search">
@@ -79,84 +90,38 @@ export function HomePage() {
         <Grid>Search result...</Grid>
       </Grid>
       <Grid style={{ maxWidth: "700px", margin: "auto" }}>
-        <Card sx={{ display: "flex", marginBottom: "20px" }}>
-          <CardMedia
-            component="img"
-            sx={{ width: 151 }}
-            image="/static/images/cards/live-from-space.jpg"
-            alt="Live from space album cover"
-          />
+        {songs.map((item) => {
+          return (
+            <Card sx={{ display: "flex", marginBottom: "20px" }}>
+              <CardMedia
+                component="img"
+                sx={{ width: 151 }}
+                image="/static/images/cards/live-from-space.jpg"
+                alt="Live from space album cover"
+              />
 
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <CardContent sx={{ flex: "1 0 auto" }}>
-              <Typography component="div" variant="h5">
-                Name
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color="text.secondary"
-                component="div"
-              >
-                Auther
-              </Typography>
-            </CardContent>
-            <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
-              description
-            </Box>
-          </Box>
-        </Card>
-        <Card sx={{ display: "flex", marginBottom: "20px" }}>
-          <CardMedia
-            component="img"
-            sx={{ width: 151 }}
-            image="/static/images/cards/live-from-space.jpg"
-            alt="Live from space album cover"
-          />
-
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <CardContent sx={{ flex: "1 0 auto" }}>
-              <Typography component="div" variant="h5">
-                Name
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color="text.secondary"
-                component="div"
-              >
-                Auther
-              </Typography>
-            </CardContent>
-            <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
-              description
-            </Box>
-          </Box>
-        </Card>
-        <Card sx={{ display: "flex", marginBottom: "20px" }}>
-          <CardMedia
-            component="img"
-            sx={{ width: 151 }}
-            image="/static/images/cards/live-from-space.jpg"
-            alt="Live from space album cover"
-          />
-
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <CardContent sx={{ flex: "1 0 auto" }}>
-              <Typography component="div" variant="h5">
-                Name
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color="text.secondary"
-                component="div"
-              >
-                Auther
-              </Typography>
-            </CardContent>
-            <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
-              description
-            </Box>
-          </Box>
-        </Card>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <CardContent sx={{ flex: "1 0 auto" }}>
+                  <Typography component="div" variant="h5">
+                    {item.name}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    component="div"
+                  >
+                    {item.artist}
+                  </Typography>
+                </CardContent>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}
+                >
+                  {item.lyrics}
+                </Box>
+              </Box>
+            </Card>
+          );
+        })}
       </Grid>
     </Fragment>
   );

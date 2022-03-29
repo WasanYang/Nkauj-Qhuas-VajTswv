@@ -1,0 +1,30 @@
+.mian-container {
+  display: grid;
+}
+.side-bar {
+  position: fixed;
+  min-width: 220px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  overflow-y: auto;
+  flex-direction: column;
+  padding: 30px 0px 16px 24px;
+  z-index: 100;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  min-width: 1146px;
+  margin: 0px 0px 0px 220px;
+  padding: 0px 35px;
+  padding-right: 0;
+}
+
+.toolbar {
+  margin-bottom: 170px;
+  padding: 38px 0;
+  z-index: 99;
+  background: rebeccapurple;
+}
